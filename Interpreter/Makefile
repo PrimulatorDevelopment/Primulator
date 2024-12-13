@@ -13,7 +13,7 @@ SRC_FILES = $(wildcard $(SRC_DIR)/*.c) Interpreter.c
 OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(SRC_FILES)))
 
 # Output executable
-EXEC = $(BIN_DIR)/program_name
+EXEC = $(BIN_DIR)/Primulator
 
 # Targets
 all: $(EXEC)

@@ -3,4 +3,4 @@ make clean
 make
 
 
-./bin/program_name
+./bin/Primulator
