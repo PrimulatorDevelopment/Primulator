@@ -10,8 +10,21 @@ CPU* initilize_CPU(){
     cpu->registers = initialize_registers();
     cpu->memory = initialize_ram();
 
-    cpu->registers[0] = 0;
+    cpu->registers[0] = 0; // always zero register
+    cpu->running = 1;
     return cpu;
+}
+
+CThread* initilize_Thread(void* function){
+    CThread* pThread = create_Thread(function);
+    for (int i = 0; i < MAX_THREADS; i++){
+        if  (cpu->threads[i] == NULL){
+            cpu->threads[i] = pThread;
+            break;
+        }
+    }
+
+    return pThread;
 }
 
 void destory_CPU(CPU** processor){

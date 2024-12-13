@@ -1,18 +1,27 @@
+#pragma once
+
 #include <stdlib.h>
 #include <stdio.h>
+#include "Threading.h"
 #include "Memory.h"
 #include "Register.h"
+
+#define MAX_THREADS 4
 
 typedef struct CPU
 {
     uint32_t* registers;
     uint8_t* memory;
+
+    CThread* threads[MAX_THREADS];
+
+    char running;
 } CPU;
 
 
 CPU* initilize_CPU();
+CThread* initilize_Thread(void* function);
 void destory_CPU(CPU** processor);
-
 
 #pragma region cpu instructions
 void add  (int rd, int rs1, int rs2);
