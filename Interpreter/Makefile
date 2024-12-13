@@ -1,20 +1,41 @@
-EXEC = test
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -I$(INCLUDE_DIR)
 
-CC = clang
-CFLAGS = -Wall -Werror -Wextra
+# Directories
+INCLUDE_DIR = ./Include
+SRC_DIR = ./Source
+BUILD_DIR = ./build
+BIN_DIR = ./bin
 
-SOURCE = $(wildcard *.c)
-HEADERS = $(wildcard *.h)
-LIBS = $(wildcard *.a)
-OBJS = $(SOURCE:.c=.o)
+# Source files and object files
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c) Interpreter.c
+OBJ_FILES = $(patsubst %.c,$(BUILD_DIR)/%.o,$(notdir $(SRC_FILES)))
 
+# Output executable
+EXEC = $(BIN_DIR)/program_name
+
+# Targets
 all: $(EXEC)
 
-$(EXEC): $(OBJS) $(LIBS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+$(EXEC): $(OBJ_FILES)
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(OBJ_FILES) -o $@
 
-%.o: %.c $(HEADERS)
+# Rule to compile .c files into .o
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(BUILD_DIR)/Interpreter.o: Interpreter.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Create build directory if it doesn't exist
+$(BUILD_DIR):
+	@mkdir -p $(BUILD_DIR)
+
+# Clean target
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -rf $(BUILD_DIR) $(BIN_DIR)
+
+# Phony targets
+.PHONY: all clean
