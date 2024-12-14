@@ -16,15 +16,16 @@ CPU* initilize_CPU(){
 }
 
 CThread* initilize_Thread(void* function){
-    CThread* pThread = create_Thread(function);
+    CThread* pThread;
     for (int i = 0; i < MAX_THREADS; i++){
         if  (cpu->threads[i] == NULL){
-            cpu->threads[i] = pThread;
+            cpu->threads[i] = create_Thread(function);
+            pThread = cpu->threads[i];
             break;
         }
     }
 
-    return pThread;
+    return pThread; // can return null when thread slots are full
 }
 
 void destory_CPU(CPU** processor){
