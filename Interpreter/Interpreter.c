@@ -6,6 +6,7 @@
 #include <CPU.h>
 
 CPU* interpreter;
+uint64_t min_address = 0;
 
 void load_elf(const char *filename) {
     FILE *file = fopen(filename, "rb");
@@ -44,6 +45,7 @@ void load_elf(const char *filename) {
 
         // Load segments of type PT_LOAD into memory
         if (phdr.p_type == PT_LOAD) {
+            // Load the segment into memory
             fseek(file, phdr.p_offset, SEEK_SET);
             fread(interpreter->memory + phdr.p_vaddr, 1, phdr.p_filesz, file);
 
@@ -51,6 +53,12 @@ void load_elf(const char *filename) {
             if (phdr.p_memsz > phdr.p_filesz) {
                 memset(interpreter->memory + phdr.p_vaddr + phdr.p_filesz, 0,
                        phdr.p_memsz - phdr.p_filesz);
+            }
+
+            // Update highest_address to be the end of this segment
+            uint64_t segment_end = phdr.p_vaddr + phdr.p_memsz;
+            if (segment_end > min_address) {
+                min_address = segment_end;
             }
         }
     }
@@ -69,15 +77,23 @@ void print_binary(uint8_t byte) {
 
 // Function to simulate running the loaded ELF
 void run_program() {
+    
     uint64_t entry_point = interpreter->registers[PROGRAM_COUNTER];
 
-    for(int i = 0; i< 100; i += 4){
+    for(int i = 0; i< 40; i += 4){
         print_binary(interpreter->memory[entry_point + i+3]);
         print_binary(interpreter->memory[entry_point + i+2]);
         print_binary(interpreter->memory[entry_point + i+1]);
         print_binary(interpreter->memory[entry_point + i]);
         printf("\n");
     }
+
+    for(int i = min_address; i > 0 ; i--){
+        //print_binary(interpreter->memory[i]);
+        //printf("\n");
+    }
+
+
 }
 
 int main() {
@@ -91,22 +107,3 @@ int main() {
 
     return 0;
 }
-
-/*
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "CPU.h"
-#include "Input.h"
-
-int main(void){
-    CPU* cpu = initilize_CPU();
-    //CThread* tInput = initilize_Thread(input_thread);
-
-    while (cpu->running){
-
-    }
-
-    destory_CPU(&cpu);
-}
-*/
