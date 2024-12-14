@@ -16,7 +16,7 @@ CPU* initilize_CPU(){
 }
 
 CThread* initilize_Thread(void* function){
-    CThread* pThread;
+    CThread* pThread = NULL;
     for (int i = 0; i < MAX_THREADS; i++){
         if  (cpu->threads[i] == NULL){
             cpu->threads[i] = create_Thread(function);
@@ -48,6 +48,11 @@ void addi(int rd, int rs1, int16_t imm){
     if (rd == 0) return;
 
     cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[rs1] + (int32_t)imm);
+}
+void li(int rd, int16_t imm){
+    if (rd == 0) return;
+
+    cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[zero] + (int32_t)imm);
 }
 void neg(int rd, int rs1){
     if (rd == 0) return;
