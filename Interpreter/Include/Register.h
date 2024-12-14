@@ -13,7 +13,6 @@
 uint32_t* initialize_registers();
 void destroy_registers(uint32_t** reg);
 
-
 #pragma region risc registers
 #define zero 0   // hardwired zero
 #define ra 1     // return address

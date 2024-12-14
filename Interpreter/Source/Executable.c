@@ -92,54 +92,34 @@ Program* load_program(const char *filename) {
     return program;
 }
 
+int resolve_func(int func)
+{
+    switch(func){
+        case fADD:
+            return 0;
+        default:
+            return -1;
+    }
+}
+
+int resolve_type(int type){
+    switch(type){
+        case R_TYPE:
+            return 0;
+        default:
+            return -1;
+    }
+}
+
+void (*instruction_table[4][4])(int, int, int) = { { (void (*)(int, int, int)) add,
+                                                     (void (*)(int, int, int)) add } };
+
+void call_instruction(int type, int func, int a, int b, int c){
+        (*instruction_table[resolve_type(type)][resolve_func(func)])(a, b, c);
+}
+
 void print_binary(uint8_t byte) {
     for (int i = 7; i >= 0; i--) { // Loop from the most significant bit (MSB) to the least significant bit (LSB)
         printf("%c", (byte & (1 << i)) ? '1' : '0');
     }
 }
-
-// Function to simulate running the loaded ELF
-void run_program(CPU* interpreter, Program* program) {
-    interpreter->registers[PROGRAM_COUNTER] = program->elf_header.e_entry;
-    uint64_t entry_point = interpreter->registers[PROGRAM_COUNTER];
-
-    for(int i = 0; i< 40; i += 4){
-        //print_binary(program->virtual_memory[entry_point + i+3]);
-        //print_binary(program->virtual_memory[entry_point + i+2]);
-        //print_binary(program->virtual_memory[entry_point + i+1]);
-        print_binary(program->virtual_memory[entry_point + i]); 
-        printf("\n");
-
-        uint16_t op_code = program->virtual_memory[entry_point + i] & 0x7F; // 0b01111111
-        uint8_t rd = ((program->virtual_memory[entry_point + i] >> 7) | (program->virtual_memory[entry_point + i + 1] << 1)) & 0x1F;
-        switch (op_code) {
-            case R_TYPE:
-                // R-type instructions
-                printf("%d, R-type instruction\n", rd);
-                break;
-
-            case I_TYPE:
-            case OPCODE_LW:
-                // I-type instructions
-                printf("%d, I-type instruction\n", rd);
-                break;
-
-            case OPCODE_SW:
-                // S-type instructions
-                printf("%d, S-type instruction\n", rd);
-                break;
-
-            default:
-                printf("Unknown instruction\n");
-                break;
-        }
-    }
-
-    for(int i = program->min_address; i > 0 ; i--){
-        //print_binary(interpreter->memory[i]);
-        //printf("\n");
-    }
-
-
-}
-

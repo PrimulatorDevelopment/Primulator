@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "CPU.h"
+#include <Executable.h>
+#include <CPU.h>
 
 // Le global scope
 CPU* cpu;
@@ -12,6 +13,7 @@ CPU* initilize_CPU(){
 
     cpu->registers[0] = 0; // always zero register
     cpu->running = 1;
+
     return cpu;
 }
 
@@ -49,14 +51,14 @@ void addi(int rd, int rs1, int16_t imm){
 
     cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[rs1] + (int32_t)imm);
 }
-void li(int rd, int16_t imm){
+void li(int rd, int16_t imm, char _){
     if (rd == 0) return;
 
     cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[zero] + (int32_t)imm);
 }
-void neg(int rd, int rs1){
+void neg(int rd, int rs1, char _){
     if (rd == 0) return;
-    
+
     cpu->registers[rd] = (uint32_t) -((int32_t)cpu->registers[rs1]);
 }
 void sub(int rd, int rs1, int rs2){
