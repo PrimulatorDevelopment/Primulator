@@ -104,11 +104,35 @@ void run_program(CPU* interpreter, Program* program) {
     uint64_t entry_point = interpreter->registers[PROGRAM_COUNTER];
 
     for(int i = 0; i< 40; i += 4){
-        print_binary(program->virtual_memory[entry_point + i+3]);
-        print_binary(program->virtual_memory[entry_point + i+2]);
-        print_binary(program->virtual_memory[entry_point + i+1]);
-        print_binary(program->virtual_memory[entry_point + i]);
+        //print_binary(program->virtual_memory[entry_point + i+3]);
+        //print_binary(program->virtual_memory[entry_point + i+2]);
+        //print_binary(program->virtual_memory[entry_point + i+1]);
+        print_binary(program->virtual_memory[entry_point + i]); 
         printf("\n");
+
+        uint16_t op_code = program->virtual_memory[entry_point + i] & 0x7F; // 0b01111111
+        uint8_t rd = ((program->virtual_memory[entry_point + i] >> 7) | (program->virtual_memory[entry_point + i + 1] << 1)) & 0x1F;
+        switch (op_code) {
+            case R_TYPE:
+                // R-type instructions
+                printf("%d, R-type instruction\n", rd);
+                break;
+
+            case I_TYPE:
+            case OPCODE_LW:
+                // I-type instructions
+                printf("%d, I-type instruction\n", rd);
+                break;
+
+            case OPCODE_SW:
+                // S-type instructions
+                printf("%d, S-type instruction\n", rd);
+                break;
+
+            default:
+                printf("Unknown instruction\n");
+                break;
+        }
     }
 
     for(int i = program->min_address; i > 0 ; i--){

@@ -16,3 +16,15 @@ typedef struct Program{
 
 Program* load_program(const char *filename);
 void run_program(CPU* interpreter, Program* program);
+
+
+#pragma region op codes
+
+#define R_TYPE    51  // 0110011
+
+#define I_TYPE   19  // 0010011
+
+#define OPCODE_LW     3   // 0000011
+#define OPCODE_SW     35  // 0100011
+
+#pragma endregion
