@@ -12,6 +12,7 @@
 
 uint32_t* initialize_registers();
 void destroy_registers(uint32_t** reg);
+const char* get_register(int rs);
 
 #pragma region risc registers
 #define zero 0   // hardwired zero

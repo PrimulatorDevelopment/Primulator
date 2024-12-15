@@ -46,15 +46,35 @@ void add(int rd, int rs1, int rs2){
     
     cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[rs1] + (int32_t)cpu->registers[rs2]);
 }
+void xor(int rd, int rs1, int rs2){
+    if (rd == 0) return;
+    
+    cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[rs1] ^ (int32_t)cpu->registers[rs2]);
+}
+void or(int rd, int rs1, int rs2){
+    if (rd == 0) return;
+    
+    cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[rs1] | (int32_t)cpu->registers[rs2]);
+}
+void and(int rd, int rs1, int rs2){
+    if (rd == 0) return;
+    
+    cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[rs1] & (int32_t)cpu->registers[rs2]);
+}
 void addi(int rd, int rs1, int16_t imm){
     if (rd == 0) return;
 
     cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[rs1] + (int32_t)imm);
+    printf("addi %s, %s, %d\n", get_register(rd), get_register(rs1), (int32_t)imm);
 }
 void li(int rd, int16_t imm, char _){
     if (rd == 0) return;
 
     cpu->registers[rd] = (uint32_t) ((int32_t)cpu->registers[zero] + (int32_t)imm);
+}
+void sh(int rs1, int rs2, int16_t imm){
+    cpu->memory[rs1+imm] = rs2;
+    printf("sh %s, %d(%s)\n", get_register(rs2), (int16_t)imm, get_register(rs1));
 }
 void neg(int rd, int rs1, char _){
     if (rd == 0) return;

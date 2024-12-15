@@ -25,8 +25,12 @@ void destory_CPU(CPU** processor);
 
 #pragma region cpu instructions
 void add  (int rd, int rs1, int rs2);
+void xor  (int rd, int rs1, int rs2);
+void or   (int rd, int rs1, int rs2);
+void and  (int rd, int rs1, int rs2);
 void addi (int rd, int rs1, int16_t imm);
 void li   (int rd, int16_t imm, char _);
+void sh   (int rs1, int rs2, int16_t imm);
 void divi (int rd, int rs1, int rs2);
 void neg  (int rd, int rs1, char _);
 void sub  (int rd, int rs1, int rs2);

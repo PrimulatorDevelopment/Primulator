@@ -1,7 +1,9 @@
 int uninit;
 int hello = 0;
 
-int _start(void) {
-    int a = 3 + 1;
-    return 0;
+int _start(int a, int b) {
+    int ac = a + b;
+    int z = ac + b;
+    int v = ac + b + a + ac + b;
+    return v;
 }

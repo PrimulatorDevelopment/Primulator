@@ -20,6 +20,7 @@ Program* load_program(const char *filename);
 
 #define R_TYPE    51  // 0110011
 #define I_TYPE   19  // 0010011
+#define S_TYPE   35  // 0100011 3
 
 #define OPCODE_LW     3   // 0000011
 #define OPCODE_SW     35  // 0100011
@@ -37,6 +38,13 @@ Program* load_program(const char *filename);
 #define fXOR combine(4, 0)
 #define fOR combine(6, 0)
 #define fAND combine(7, 0)
+
+#define fADDI combine(0, 0)
+#define fXORI combine(4, 0)
+#define fORI combine(6, 0)
+#define fANDI combine(7, 0)
+
+#define fSH combine(1, 35)
 
 #pragma endregion
 

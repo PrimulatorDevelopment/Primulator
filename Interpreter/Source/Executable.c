@@ -95,24 +95,34 @@ Program* load_program(const char *filename) {
 int resolve_func(int func)
 {
     switch(func){
-        case fADD:
-            return 0;
-        default:
-            return -1;
+        case fADD: return 0;    // addi, add
+        case fSUB: return 1; 
+        case fXOR: return 2;    // xori, xor
+        case fOR: return 3;     // ori, or
+        case fAND: return 4;    // andi, and
+        case fSH: return 0;
+        default: return 0;
     }
 }
 
 int resolve_type(int type){
     switch(type){
-        case R_TYPE:
-            return 0;
-        default:
-            return -1;
+        case R_TYPE: return 0;
+        case I_TYPE: return 1;
+        case S_TYPE: return 2;
+        default: return 0;
     }
 }
 
 void (*instruction_table[4][4])(int, int, int) = { { (void (*)(int, int, int)) add,
-                                                     (void (*)(int, int, int)) add } };
+                                                     (void (*)(int, int, int)) sub,
+                                                     (void (*)(int, int, int)) xor,
+                                                     (void (*)(int, int, int)) or,
+                                                     (void (*)(int, int, int)) and },
+                                                     
+                                                   { (void (*)(int, int, int)) addi },
+                                                   { (void (*)(int, int, int)) sh }
+                                                 };
 
 void call_instruction(int type, int func, int a, int b, int c){
         (*instruction_table[resolve_type(type)][resolve_func(func)])(a, b, c);
